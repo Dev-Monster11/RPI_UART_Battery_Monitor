@@ -680,7 +680,7 @@ class BoardComm():
         pass
     def receive():
         print(self.com.readAll())
-    def openPort():
+    def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
             self.com.setDataBits(QtSerialPort.QSerialPort.Data8)
