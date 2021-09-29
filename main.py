@@ -673,21 +673,22 @@ class BoardComm():
     def __init__(self):
         self.com = QtSerialPort.QSerialPort(
             '/dev/ttyS1',
-            baudRate=QtSerialPort.QSerialPort.Baud115200,
-            dataBits=QtSerialPort.QSerialPort.Data8,
-            stopBit=QtSerialPort.QSerialPort.OneStop,
-            parity=QtSerialPort.QSerialPort.NoParity,
             readyRead=self.receive,
 
         )
     def readData(comm):
         pass
     def receive():
-        pass
-
-    
+        print(self.com.readAll())
+    def openPort(self):
+        if self.com.open(QIODevice.ReadWrite):
+            self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
+            self.com.setDataBits(QtSerialPort.QSerialPort.Data8)
+            self.com.setStopBit(QtSerialPort.QSerialPort.OneStop)
+            self.com.setParity(QtSerialPort.QSerialPort.NoParity)
+            self.serial.readyRead.connect(self.receive)
     def startComm(self):
-        while True: 
+        # while True: 
             #recieve = readData(comm)
             self.comm.write("asdfasdf")
             #print(recieve)
