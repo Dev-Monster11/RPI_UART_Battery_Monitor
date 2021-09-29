@@ -1,0 +1,28 @@
+#dipendenze
+
+sudo apt-get install python3-pip python3-dev
+sudo apt-get install python3-pyqt5
+sudo apt-get install qt5-default
+sudo -H pip3 install virtualenv
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+
+# per avviare il programma
+python main.py
+
+
+
+
+# per creare un eseguibile installare pyinstaller
+
+apt-get install git
+git clone https://github.com/pyinstaller/pyinstaller
+cd pyinstaller/
+sudo python3 setup.py install
+
+
+# per builder con pyinstaller
+
+pyinstaller main.py
