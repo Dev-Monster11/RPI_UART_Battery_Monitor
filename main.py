@@ -300,7 +300,7 @@ class ViewPort(QtWidgets.QGraphicsView):
         self.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.setFixedSize(1024, 720) #Optimal 1024, 600
         self.build_schematic()
-        self.setMouseTracking(True)
+        # self.setMouseTracking(True)
 
     def build_schematic(self):
 
@@ -520,10 +520,13 @@ class ViewPort(QtWidgets.QGraphicsView):
         self.statusList = {}
         with open('./status.json') as f:
             self.statusList = json.loads(f.read())
+    def setViewData(self, data):
 
-    def mouseMoveEvent(self, event): 
-        print('mouseMoveEvent: pos {}'.format(event.pos()))
         pass
+
+    # def mouseMoveEvent(self, event): 
+    #     print('mouseMoveEvent: pos {}'.format(event.pos()))
+    #     pass
 
 class ShowDate(QtWidgets.QGraphicsTextItem):
 
@@ -534,7 +537,7 @@ class ShowDate(QtWidgets.QGraphicsTextItem):
         timer.timeout.connect(self.updateTime)
         timer.start()
         self.dateLabel.setPos(750, 630)
-
+        self.dataLabel.setText('asdf')
         self.scene = scene
         self.scene.addItem(self.dateLabel)
 
@@ -563,7 +566,7 @@ class SettingView(QtWidgets.QGraphicsView):
 
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID", "Nome", "Valore", "Unita", "Descrizione"])        
-    def setTableData(self, data):
+    def setSettingData(self, data):
 
         self.table.setRowCount(len(data))
         for i in range(data):
@@ -727,6 +730,6 @@ if __name__ == '__main__':
     timer.start()
 
     boardcom = BoardComm()
-    boardcom.packetReceived.connect(setting_view.setTableData)
+    boardcom.packetReceived.connect(setting_view.setSettingData)
     boardcom.startComm()
     sys.exit(app.exec())
