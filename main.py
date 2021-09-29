@@ -1,7 +1,7 @@
 import math, sys, json, time
 
 from PyQt5 import QtWidgets, QtCore, QtGui, QtSerialPort
-from PyQt5.QtCore import QTimer, QDateTime, QIODevice, pyqtSignal, pyqtSlot, QObject
+from PyQt5.QtCore import QTimer, QDateTime, QIODevice, pyqtSignal, pyqtSlot, QObject, QMap
 
 
 class Path(QtWidgets.QGraphicsPathItem):
@@ -560,16 +560,14 @@ class SettingView(QtWidgets.QGraphicsView):
         self.table.setMinimumWidth(1000)
         self.table.setMinimumHeight(500)
         self.table.verticalHeader().setVisible(False)
-        # header = self.table.horizontalHeader()
-        # header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)       
-        # header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
-        # header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID","Nome", "Valore", "Unita", "Descrizione"])        
-    def setTableData(self):
+    def setTableData(self, n, l):
         # self.table.setRowCount(len(data) + 1)
-        self.table.setRowCount(5)
-        for i in range(5):
+        self.table.setRowCount(n)
+        print(l)
+        for i in range(n):
             for j in range(5):
                 self.table.setItem(i, j, QtWidgets.QTableWidgetItem("Row-" + str(i+1) + " , Col-" + str(j+1)))
 
@@ -677,7 +675,7 @@ class AlarmView(QtWidgets.QGraphicsView):
 
 
 class BoardComm(QObject):
-    packetReceived = pyqtSignal()
+    packetReceived = pyqtSignal(int, dict)
     def __init__(self):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
@@ -688,8 +686,8 @@ class BoardComm(QObject):
     def readData(comm):
         pass
     def receive(self):
-        print(self.com.readAll())
-        self.packetReceived.emit()
+        data = self.com.readAll()
+        self.packetReceived.emit(5, data)
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
@@ -715,7 +713,7 @@ if __name__ == '__main__':
 
     
     widgets = QtWidgets.QStackedWidget()
-    # widgets.addWidget(window)
+    # widgets.addWidget(window)     //test code
     widgets.addWidget(setting_view)
     widgets.addWidget(maintenance_view)
     widgets.addWidget(alarm_view)
