@@ -684,7 +684,7 @@ class BoardComm():
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
             self.com.setDataBits(QtSerialPort.QSerialPort.Data8)
-            self.com.setStopBit(QtSerialPort.QSerialPort.OneStop)
+            self.com.setStopBits(QtSerialPort.QSerialPort.OneStop)
             self.com.setParity(QtSerialPort.QSerialPort.NoParity)
             self.serial.readyRead.connect(self.receive)
     def startComm(self):
