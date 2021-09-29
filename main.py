@@ -563,7 +563,7 @@ class SettingView(QtWidgets.QGraphicsView):
 
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID","Nome", "Valore", "Unita", "Descrizione"])        
-    def setTableData(self, n, l):
+    def setTableData(self, l):
         # self.table.setRowCount(len(data) + 1)
         self.table.setRowCount(n)
         print(l)
@@ -675,7 +675,7 @@ class AlarmView(QtWidgets.QGraphicsView):
 
 
 class BoardComm(QObject):
-    packetReceived = pyqtSignal(int, list)
+    packetReceived = pyqtSignal(list)
     def __init__(self):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
@@ -683,10 +683,11 @@ class BoardComm(QObject):
             readyRead=self.receive,
         )
     
-    def readData(comm):
-        pass
-    def receive(self):
+    def readData(self):
         data = self.com.readAll()
+        tokens = bytes(data).split(';')
+        print(bytes(data))
+        print(tokens)
         list_of_dictionaries = [{"a": "asdf", "b": "bac"}]
         self.packetReceived.emit(5, list_of_dictionaries)
     def openPort(self):
@@ -695,7 +696,7 @@ class BoardComm(QObject):
             self.com.setDataBits(QtSerialPort.QSerialPort.Data8)
             self.com.setStopBits(QtSerialPort.QSerialPort.OneStop)
             self.com.setParity(QtSerialPort.QSerialPort.NoParity)
-            self.com.readyRead.connect(self.receive)
+            self.com.readyRead.connect(self.readData)
     def startComm(self):
         # while True: 
             #recieve = readData(comm)
