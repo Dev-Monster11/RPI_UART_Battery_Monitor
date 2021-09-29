@@ -685,6 +685,8 @@ class BoardComm(QObject):
     def readData(self):
         data = self.com.readAll()
         print(type(data))
+        v = data.data().decode('utf8')
+        print(type(v))
         tokens = bytes(data).split(';')
         print(bytes(data))
         print(tokens)
