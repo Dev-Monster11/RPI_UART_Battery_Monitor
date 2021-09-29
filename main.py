@@ -1,6 +1,6 @@
 import math, sys, json, time
-import serial
-from PyQt5 import QtWidgets, QtCore, QtGui
+
+from PyQt5 import QtWidgets, QtCore, QtGui, QtSerialPort
 from PyQt5.QtCore import QTimer, QDateTime
 
 
@@ -671,19 +671,22 @@ class AlarmView(QtWidgets.QGraphicsView):
 
 class BoardComm():
     def __init__(self):
-        self.com = serial.Serial(
-                    port="/dev/ttyS0",
-                    baudrate = 115200,
-                    parity=serial.PARITY_NONE,
-                    stopbits=serial.STOPBITS_ONE,
-                    bytesize=serial.EIGHTBITS,
-                    timeout = 1) # configure parameters 
-    def readData(comm): #implement
-        pass
+        self.com = QtSerialPort.QSerialPort(
+            '/dev/ttyS1',
+            baudRate=QtSerialPort.QSerialPort.Baud115200,
+            dataBits=QtSerialPort.QSerialPort.Data8,
+            stopBit=QtSerialPort.QSerialPort.OneStop,
+            parity=QtSerialPort.QSerialPort.NoParity,
+            readyRead=self.receive,
 
+        )
+    def readData(comm):
+        pass
+    def receive():
+        
 
     
-    def startComm():
+    def startComm(self):
         while True: 
             #recieve = readData(comm)
             self.comm.write("asdfasdf")
