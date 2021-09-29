@@ -1,7 +1,7 @@
 import math, sys, json, time
 
 from PyQt5 import QtWidgets, QtCore, QtGui, QtSerialPort
-from PyQt5.QtCore import QTimer, QDateTime
+from PyQt5.QtCore import QTimer, QDateTime, QIODevice
 
 
 class Path(QtWidgets.QGraphicsPathItem):
