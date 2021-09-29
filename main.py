@@ -681,12 +681,12 @@ class BoardComm():
                     stopbits=serial.STOPBITS_ONE,
                     bytesize=serial.EIGHTBITS,
                     timeout = 1) # configure parameters 
+    
     def startComm():
-        
-    while True: 
-        recieve = readData(comm)
-        comm.write(repr(recieve))
-        print(recieve)
+        while True: 
+            recieve = readData(comm)
+            comm.write("asdfasdf")
+            print(recieve)
     
 if __name__ == '__main__':
 
@@ -713,4 +713,6 @@ if __name__ == '__main__':
     timer.setInterval(1000)
     timer.start()
 
+    boardcom = BoardComm()
+    boardcom.startComm()
     sys.exit(app.exec())
