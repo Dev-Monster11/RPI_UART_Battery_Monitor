@@ -687,7 +687,7 @@ class BoardComm(QObject):
         pass
     def receive(self):
         data = self.com.readAll()
-        list_of_dictionaries = [dict() for number in range(3)]
+        list_of_dictionaries = [{"a": "asdf", "b": "bac"}]
         self.packetReceived.emit(5, list_of_dictionaries)
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
