@@ -670,23 +670,24 @@ class AlarmView(QtWidgets.QGraphicsView):
 
 
 class BoardComm():
-
-    def readData(comm): #implement
-        pass
-
-    comm = serial.Serial(
+    def __init__(self):
+        self.com = serial.Serial(
                     port="/dev/ttyS0",
                     baudrate = 115200,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_ONE,
                     bytesize=serial.EIGHTBITS,
                     timeout = 1) # configure parameters 
+    def readData(comm): #implement
+        pass
+
+
     
     def startComm():
         while True: 
-            recieve = readData(comm)
-            comm.write("asdfasdf")
-            print(recieve)
+            #recieve = readData(comm)
+            self.comm.write("asdfasdf")
+            #print(recieve)
     
 if __name__ == '__main__':
 
