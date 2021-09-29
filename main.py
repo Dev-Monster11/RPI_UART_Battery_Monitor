@@ -683,7 +683,7 @@ class BoardComm():
     def readData(comm):
         pass
     def receive():
-        
+        pass
 
     
     def startComm(self):
