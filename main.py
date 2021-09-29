@@ -715,7 +715,7 @@ if __name__ == '__main__':
 
     
     widgets = QtWidgets.QStackedWidget()
-    widgets.addWidget(window)
+    # widgets.addWidget(window)
     widgets.addWidget(setting_view)
     widgets.addWidget(maintenance_view)
     widgets.addWidget(alarm_view)
