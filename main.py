@@ -691,7 +691,7 @@ class BoardComm():
         # while True: 
             #recieve = readData(comm)
         self.openPort()
-        self.com.write("asdfasdf")
+        self.com.write(b"asdfasdf")
             #print(recieve)
     
 if __name__ == '__main__':
