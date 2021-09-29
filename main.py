@@ -564,7 +564,7 @@ class SettingView(QtWidgets.QGraphicsView):
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID","Nome", "Valore", "Unita", "Descrizione"])        
     def setTableData(self, l):
-        # self.table.setRowCount(len(data) + 1)
+        
         self.table.setRowCount(len(l))
         for i in range(n):
             for j in range(5):
@@ -683,14 +683,9 @@ class BoardComm(QObject):
     
     def readData(self):
         data = self.com.readAll()
-        # print(type(data))
         data = data.data().decode('utf8')
-        # print(type(v))
         tokens = data.split(';')
-        
-        print(tokens)
-
-        self.packetReceived.emit(token)
+        self.packetReceived.emit(tokens)
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
