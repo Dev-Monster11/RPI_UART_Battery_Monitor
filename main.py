@@ -1,7 +1,7 @@
 import math, sys, json, time
 
 from PyQt5 import QtWidgets, QtCore, QtGui, QtSerialPort
-from PyQt5.QtCore import QTimer, QDateTime, QIODevice
+from PyQt5.QtCore import QTimer, QDateTime, QIODevice, pyqtSignal, pyqtSlot, QObject
 
 
 class Path(QtWidgets.QGraphicsPathItem):
@@ -552,19 +552,26 @@ class SettingView(QtWidgets.QGraphicsView):
         self.mainBtn.setStyleSheet("font: 25px;")
         self.mainBtn.clicked.connect(self.navigateToMain)
         self.mainBtn.move(2,600)
+        self.createTable()
     def createTable(self):
         self.table = QtWidgets.QTableWidget(self)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.table.setRowCount(4)
-        self.table.setColumnCount(2)
+
         self.table.setMinimumWidth(1000)
         self.table.setMinimumHeight(500)
         self.table.verticalHeader().setVisible(False)
-        header = self.table.horizontalHeader()
-        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)       
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        # header = self.table.horizontalHeader()
+        # header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)       
+        # header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        # header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID","Nome", "Valore", "Unita", "Descrizione"])        
+    def setTableData(self):
+        # self.table.setRowCount(len(data) + 1)
+        self.table.setRowCount(5)
+        for i in 5:
+            for j in range(5):
+                self.table.setItem(i, j, QtWidgets.QTableWidgetItem("Row-" + str(i+1) + " , Col-" + str(j+1)))
 
     def navigateToMain(self):
         widgets.setCurrentIndex(widgets.currentIndex() - 1)
@@ -669,17 +676,20 @@ class AlarmView(QtWidgets.QGraphicsView):
         widgets.setCurrentIndex(widgets.currentIndex() - 3)
 
 
-class BoardComm():
+class BoardComm(QObject):
+    packetReceived = pyqtSignal()
     def __init__(self):
+        super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
             '/dev/ttyS1',
             readyRead=self.receive,
-
         )
+    
     def readData(comm):
         pass
     def receive(self):
         print(self.com.readAll())
+        self.packetReceived.emit()
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
@@ -703,6 +713,7 @@ if __name__ == '__main__':
     maintenance_view = MaintenanceView()
     alarm_view = AlarmView()
 
+    
     widgets = QtWidgets.QStackedWidget()
     widgets.addWidget(window)
     widgets.addWidget(setting_view)
@@ -720,5 +731,6 @@ if __name__ == '__main__':
     timer.start()
 
     boardcom = BoardComm()
+    boardcom.packetReceived.connect(setting_view.setTableData)
     boardcom.startComm()
     sys.exit(app.exec())
