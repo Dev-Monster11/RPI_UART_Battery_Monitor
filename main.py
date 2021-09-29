@@ -679,8 +679,7 @@ class BoardComm(QObject):
     def __init__(self):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
-            '/dev/ttyS1',
-            readyRead=self.receive,
+            '/dev/ttyS1'
         )
     
     def readData(self):
