@@ -131,8 +131,11 @@ class ValueBox(QtWidgets.QGraphicsRectItem):
     def __init__(self,scene, x, y, rw, rh):
         super(ValueBox, self).__init__()
         val_box = QtWidgets.QGraphicsRectItem(QtCore.QRectF(x, y, rw, rh))
+        self.text_item = QtWidgets.QGraphicsTextItem("asdf", val_box)
         self.scene = scene
         self.scene.addItem(val_box)
+
+
 
 class SwitchButton(QtWidgets.QPushButton):
 
@@ -537,7 +540,6 @@ class ShowDate(QtWidgets.QGraphicsTextItem):
         timer.timeout.connect(self.updateTime)
         timer.start()
         self.dateLabel.setPos(750, 630)
-        self.dataLabel.setText('asdf')
         self.scene = scene
         self.scene.addItem(self.dateLabel)
 
