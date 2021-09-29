@@ -678,7 +678,7 @@ class BoardComm():
         )
     def readData(comm):
         pass
-    def receive():
+    def receive(self):
         print(self.com.readAll())
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
