@@ -562,11 +562,11 @@ class SettingView(QtWidgets.QGraphicsView):
         self.table.verticalHeader().setVisible(False)
 
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["ID","Nome", "Valore", "Unita", "Descrizione"])        
-    def setTableData(self, l):
-        
-        self.table.setRowCount(len(l))
-        for i in range(n):
+        self.table.setHorizontalHeaderLabels(["ID", "Nome", "Valore", "Unita", "Descrizione"])        
+    def setTableData(self, data):
+
+        self.table.setRowCount(len(data))
+        for i in range(data):
             for j in range(5):
                 self.table.setItem(i, j, QtWidgets.QTableWidgetItem("Row-" + str(i+1) + " , Col-" + str(j+1)))
 
@@ -711,7 +711,7 @@ if __name__ == '__main__':
 
     
     widgets = QtWidgets.QStackedWidget()
-    # widgets.addWidget(window)     //test code
+    widgets.addWidget(window)
     widgets.addWidget(setting_view)
     widgets.addWidget(maintenance_view)
     widgets.addWidget(alarm_view)
