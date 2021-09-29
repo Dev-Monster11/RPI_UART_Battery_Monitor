@@ -675,7 +675,7 @@ class AlarmView(QtWidgets.QGraphicsView):
 
 
 class BoardComm(QObject):
-    packetReceived = pyqtSignal(int, dict)
+    packetReceived = pyqtSignal(int, list)
     def __init__(self):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
@@ -687,7 +687,7 @@ class BoardComm(QObject):
         pass
     def receive(self):
         data = self.com.readAll()
-        self.packetReceived.emit(5, data)
+        self.packetReceived.emit(5, [{a: 'asdf', b: 'www'}, {b: 'qwer'}])
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
