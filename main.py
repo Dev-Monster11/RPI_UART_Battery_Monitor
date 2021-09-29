@@ -569,7 +569,7 @@ class SettingView(QtWidgets.QGraphicsView):
     def setTableData(self):
         # self.table.setRowCount(len(data) + 1)
         self.table.setRowCount(5)
-        for i in 5:
+        for i in range(5):
             for j in range(5):
                 self.table.setItem(i, j, QtWidgets.QTableWidgetItem("Row-" + str(i+1) + " , Col-" + str(j+1)))
 
