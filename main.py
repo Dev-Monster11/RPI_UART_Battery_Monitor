@@ -686,7 +686,7 @@ class BoardComm():
             self.com.setDataBits(QtSerialPort.QSerialPort.Data8)
             self.com.setStopBits(QtSerialPort.QSerialPort.OneStop)
             self.com.setParity(QtSerialPort.QSerialPort.NoParity)
-            self.serial.readyRead.connect(self.receive)
+            self.com.readyRead.connect(self.receive)
     def startComm(self):
         # while True: 
             #recieve = readData(comm)
