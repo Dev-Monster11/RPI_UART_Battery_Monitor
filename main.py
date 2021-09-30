@@ -535,7 +535,7 @@ class ViewPort(QtWidgets.QGraphicsView):
     def setViewData(self, data):
         # print('------')
         # print(data['V1'])
-        
+        print(data)
         self.val_box_4.setText(data['V1'])
         self.val_box_1.setText(data['V2']) #verify
         self.val_box_2.setText(data['V3'])
@@ -744,18 +744,21 @@ class BoardComm(QObject):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
             # '/dev/ttyS1'
-            'COM2'
+            '/dev/ttyS1'
         )
     
     def readData(self):
         data = self.com.readAll()
+        print("------")
+        print(data)
         data = data.data().decode('utf8')
         data = data[7:]
         tokens = data.split(';')
         datas = {}
         for x in tokens:
             values = x.split('=')
-            datas[values[0]] = values[1]
+            if (len(values) > 1):
+                datas[values[0]] = values[1]
         self.packetReceived.emit(datas)
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
