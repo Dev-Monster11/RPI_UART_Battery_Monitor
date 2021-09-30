@@ -131,11 +131,19 @@ class ValueBox(QtWidgets.QGraphicsRectItem):
     def __init__(self,scene, x, y, rw, rh):
         super(ValueBox, self).__init__()
         val_box = QtWidgets.QGraphicsRectItem(QtCore.QRectF(x, y, rw, rh))
-        self.text_item = QtWidgets.QGraphicsTextItem("asdf", val_box)
+        myProxy = QtWidgets.QGraphicsProxyWidget(val_box)
+        self.label = QtWidgets.QLabel('')
+        # self.label.setStyleSheet('font-weight: bold')
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setStyleSheet('background-color: white; font-weight: bold')
+        self.label.setGeometry(0, 0, rw - 2, rh - 2)
+        myProxy.setWidget(self.label)
+        myProxy.setPos(val_box.boundingRect().center() - self.label.rect().center())
         self.scene = scene
         self.scene.addItem(val_box)
 
-
+    def setText(self, val):
+        self.label.setText(str(val))
 
 class SwitchButton(QtWidgets.QPushButton):
 
@@ -303,6 +311,7 @@ class ViewPort(QtWidgets.QGraphicsView):
         self.setAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignTop)
         self.setFixedSize(1024, 720) #Optimal 1024, 600
         self.build_schematic()
+        
         # self.setMouseTracking(True)
 
     def build_schematic(self):
@@ -420,14 +429,14 @@ class ViewPort(QtWidgets.QGraphicsView):
         self.box_6 = SquareButton(self.scene, 680, 480, "", "", box_name="CV2",switch_name="IS7")
 
         #value boxes right 
-        val_box_1 = ValueBox(self.scene, 940, 105, 70, 30)
-        val_box_2 = ValueBox(self.scene, 940, 259, 70, 30)
-        val_box_3 = ValueBox(self.scene, 940, 452, 70, 30)
+        self.val_box_1 = ValueBox(self.scene, 940, 105, 70, 30)
+        self.val_box_2 = ValueBox(self.scene, 940, 259, 70, 30)
+        self.val_box_3 = ValueBox(self.scene, 940, 452, 70, 30)
 
         #value boxes left 
-        val_box_4 = ValueBox(self.scene, 60, 150, 70, 30)
-        val_box_5 = ValueBox(self.scene, 279, 254, 70, 30)
-        val_box_6 = ValueBox(self.scene, 279, 152, 70, 30)
+        self.val_box_4 = ValueBox(self.scene, 60, 150, 70, 30)
+        self.val_box_5 = ValueBox(self.scene, 279, 254, 70, 30)
+        self.val_box_6 = ValueBox(self.scene, 279, 152, 70, 30)
 
         #value box lines
 
@@ -479,7 +488,7 @@ class ViewPort(QtWidgets.QGraphicsView):
         self.alarmBtn.clicked.connect(self.navigateToAlarm)
         self.alarmBtn.move(324,630)
 
-        #self.dateLabel = ShowDate(self.scene) 
+        self.dateLabel = ShowDate(self.scene) 
 
         self.setScene(self.scene)
         
@@ -524,8 +533,37 @@ class ViewPort(QtWidgets.QGraphicsView):
         with open('./status.json') as f:
             self.statusList = json.loads(f.read())
     def setViewData(self, data):
+        # print('------')
+        # print(data['V1'])
+        
+        self.val_box_4.setText(data['V1'])
+        self.val_box_1.setText(data['V2']) #verify
+        self.val_box_2.setText(data['V3'])
+        self.val_box_3.setText(data['V4'])
+        # self.val_box_3.setText(data['V2'] + ',' + data['I2'])
+        
+        # self.val_box_5.setText(data['V4'])
+        # self.val_box_6.setText(data['V3'] + ',' + data['I3'])
 
-        pass
+        self.ic_1.setStatus(data['ic'][0] == '1')
+        self.ic_2.setStatus(data['ic'][1] == '1')
+        self.ic_3.setStatus(data['ic'][2] == '1')
+        # self.ic_4.setStatus(data['ic'][3] == '1')
+        self.ic_5.setStatus(data['ic'][4] == '1')
+        self.ic_6.setStatus(data['ic'][5] == '1')
+        self.ic_7.setStatus(data['ic'][6] == '1')
+        
+        # self.ic_8.setStatus(data['is'][0] == '1')
+        self.ic_9.setStatus(data['is'][0] == '1')
+        self.ic_10.setStatus(data['is'][1] == '1')
+        self.ic_11.setStatus(data['is'][2] == '1')
+        self.ic_12.setStatus(data['is'][3] == '1')
+        self.ic_13.setStatus(data['is'][4] == '1')
+        # self.ic_14.setStatus(data['is'][5] == '1')
+        # self.ic_7.setStatus(data['is'][7] == '1')
+        # self.ic_7.setStatus(data['is'][8] == '1')
+        # self.ic_7.setStatus(data['is'][9] == '1')
+        
 
     # def mouseMoveEvent(self, event): 
     #     print('mouseMoveEvent: pos {}'.format(event.pos()))
@@ -536,10 +574,18 @@ class ShowDate(QtWidgets.QGraphicsTextItem):
     def __init__(self, scene):
         super(ShowDate, self).__init__()
         self.dateLabel = QtWidgets.QGraphicsTextItem(self)
+        datetimefont = self.dateLabel.font()
+        datetimefont.setPixelSize(25)
+        datetimefont.setBold(True)
+
+        self.dateLabel.setFont(datetimefont)
         timer = QTimer(self)
         timer.timeout.connect(self.updateTime)
         timer.start()
-        self.dateLabel.setPos(750, 630)
+        # self.dateLabel.setPos(750, 630)
+        self.dateLabel.setPos(650, 630)
+        # self.dateLabel.setStyleSheet("font-size: 30px; font-weight: bold")
+        # self.dateLabel.setFont()
         self.scene = scene
         self.scene.addItem(self.dateLabel)
 
@@ -548,30 +594,44 @@ class ShowDate(QtWidgets.QGraphicsTextItem):
         currentdate = datetime.toString()
         self.dateLabel.setPlainText("    " + currentdate);
 
-
-
 class SettingView(QtWidgets.QGraphicsView):
     def __init__(self):
         super(SettingView, self).__init__()
         self.mainBtn = QtWidgets.QPushButton('Main', self)
         self.mainBtn.setStyleSheet("font: 25px;")
         self.mainBtn.clicked.connect(self.navigateToMain)
-        self.mainBtn.move(2,600)
+        self.mainBtn.move(2, 600)
+        self.inputdlg = InputView()
+        # self.inputdlg.setParent(self)
         self.createTable()
     def createTable(self):
         self.table = QtWidgets.QTableWidget(self)
         self.table.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-
+        
         self.table.setMinimumWidth(1000)
         self.table.setMinimumHeight(500)
         self.table.verticalHeader().setVisible(False)
 
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID", "Nome", "Valore", "Unita", "Descrizione"])        
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)       
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+        header.setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
+
+        self.table.cellDoubleClicked.connect(self.input)
+
+    def input(self, r, c):
+        print(r)
+        print(c)
+        self.inputdlg.exec()
     def setSettingData(self, data):
 
         self.table.setRowCount(len(data))
-        for i in range(data):
+        for i in range(len(data)):
             for j in range(5):
                 self.table.setItem(i, j, QtWidgets.QTableWidgetItem("Row-" + str(i+1) + " , Col-" + str(j+1)))
 
@@ -679,18 +739,24 @@ class AlarmView(QtWidgets.QGraphicsView):
 
 
 class BoardComm(QObject):
-    packetReceived = pyqtSignal(list)
+    packetReceived = pyqtSignal(dict)
     def __init__(self):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
-            '/dev/ttyS1'
+            # '/dev/ttyS1'
+            'COM2'
         )
     
     def readData(self):
         data = self.com.readAll()
         data = data.data().decode('utf8')
+        data = data[7:]
         tokens = data.split(';')
-        self.packetReceived.emit(tokens)
+        datas = {}
+        for x in tokens:
+            values = x.split('=')
+            datas[values[0]] = values[1]
+        self.packetReceived.emit(datas)
     def openPort(self):
         if self.com.open(QIODevice.ReadWrite):
             self.com.setBaudRate(QtSerialPort.QSerialPort.Baud115200)
@@ -705,11 +771,43 @@ class BoardComm(QObject):
         self.com.write(b"asdfasdf")
             #print(recieve)
     
+
+class InputView(QtWidgets.QDialog):
+    def __init__(self):
+        super(InputView, self).__init__()
+        self.title = QtWidgets.QLabel('Vdcreg', self)
+        self.leftnum = QtWidgets.QSpinBox(self)
+        self.rightnum = QtWidgets.QSpinBox(self)
+        self.unit = QtWidgets.QLabel('V', self)
+        self.textlog = QtWidgets.QPlainTextEdit('tensione regolatore,\n(minimo=100.00, massimo=120.000, step = 1.000)', self)
+        self.btnCancel = QtWidgets.QPushButton('Cancel', self)
+        self.btnOK = QtWidgets.QPushButton('OK', self)
+
+        self.setStyleSheet('QDialog{background-color: #03a9f4}')
+        self.title.setStyleSheet('font-size: 30px; font-weight: bold; color: #ffffff; background-color: transparent;')
+        self.leftnum.setStyleSheet('font-size: 40px;')
+        self.rightnum.setStyleSheet('font-size: 40px')
+        self.unit.setStyleSheet('background-color: transparent; font-size: 40px; color: #ffffff')
+        self.unit.setStyleSheet('font-size: 15px;')
+        self.btnOK.setStyleSheet('font-size: 25px')
+        self.btnCancel.setStyleSheet('font-size: 25px')
+        
+        self.setGeometry(0, 0, 400, 260)
+        self.title.setGeometry(20, 10, 120, 30)
+        self.leftnum.setGeometry(20, 60, 120, 50)
+        self.rightnum.setGeometry(220, 60, 120, 50)
+        self.unit.setGeometry(350, 60, 50, 30)
+        self.textlog.setGeometry(20, 130, 330, 60)
+        self.btnOK.setGeometry(250, 220, 90, 35)
+        self.btnCancel.setGeometry(20, 220, 90, 35)
+        
+        self.textlog.setFocus()
 if __name__ == '__main__':
 
     app = QtWidgets.QApplication(sys.argv)
 
     window = ViewPort()
+
     setting_view = SettingView()
     maintenance_view = MaintenanceView()
     alarm_view = AlarmView()
@@ -726,12 +824,13 @@ if __name__ == '__main__':
 
     widgets.show()
 
-    timer = QtCore.QTimer()
-    timer.timeout.connect(window.getSwitchData)
-    timer.setInterval(1000)
-    timer.start()
+    # timer = QtCore.QTimer()
+    # timer.timeout.connect(window.getSwitchData)
+    # timer.setInterval(1000)
+    # timer.start()
 
     boardcom = BoardComm()
     boardcom.packetReceived.connect(setting_view.setSettingData)
+    boardcom.packetReceived.connect(window.setViewData)
     boardcom.startComm()
     sys.exit(app.exec())
