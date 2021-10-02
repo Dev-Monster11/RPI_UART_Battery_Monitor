@@ -401,15 +401,14 @@ class ViewPort(QtWidgets.QGraphicsView):
         # left
         self.ic_1 = SwitchButton(self.scene, 180, 80,status_led_pos=SwitchButton.BOTTOM_POS,switch_name="IS8")
         self.ic_2 = SwitchButton(self.scene, 60, 210,status_led_pos=SwitchButton.BOTTOM_POS,switch_name="IC1")
-        #self.ic_2.setClickHandler(self.box_1_handler)
         self.ic_3 = SwitchButton(self.scene, 454, 255, status_led_pos=SwitchButton.LEFT_POS,switch_name="IS9")
         self.ic_5 = SwitchButton(self.scene, 300, 410, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC8")
         self.ic_6 = SwitchButton(self.scene, 300, 510, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC3")
+        self.ic_14 = SwitchButton(self.scene, 60, 310, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC2")
 
         #right
         self.ic_7 = SwitchButton(self.scene, 600, 110,status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC4")
-        #self.ic_8 = SwitchButton(self.scene, 880, 107, status_led_pos=SwitchButton.BOTTOM_POS)
-        #self.ic_8.setClickHandler(self.ic_8_handler)
+
         self.ic_9 = SwitchButton(self.scene, 600, 210,status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC5")
         self.ic_10 = SwitchButton(self.scene, 880, 207, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IS10")
         self.ic_11 = SwitchButton(self.scene, 700, 290, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="C0")
@@ -417,10 +416,10 @@ class ViewPort(QtWidgets.QGraphicsView):
         self.ic_12 = SwitchButton(self.scene, 600, 410, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC6")
         self.ic_13 = SwitchButton(self.scene, 600, 510, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC7")
 
-        self.ic_14 = SwitchButton(self.scene, 60, 310, status_led_pos=SwitchButton.BOTTOM_POS, switch_name="IC2")
 
-        self.box_1 = SquareButton(self.scene, 180, 180, "", "", box_name="RD1",switch_name="") #x:470
-        self.box_2 = SquareButton(self.scene, 180, 280, "", "", box_name="RD2",switch_name="") #x:470
+
+        self.box_1 = SquareButton(self.scene, 180, 180, "", "", box_name="RD1",switch_name="IS1") #x:470
+        self.box_2 = SquareButton(self.scene, 180, 280, "", "", box_name="RD2",switch_name="IS2") #x:470
 
         self.box_3 = SquareButton(self.scene, 680, 80, "", "", box_name="INV1",switch_name="IS4")
         self.box_4 = SquareButton(self.scene, 680, 180, "", "", box_name="REG1",switch_name="IS5")
