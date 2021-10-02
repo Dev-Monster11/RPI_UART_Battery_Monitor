@@ -126,7 +126,6 @@ class SquareButton(QtWidgets.QPushButton):
     def setClickHandler(self, function):
         self.clicked.connect(function)
 
-
 class ValueBox(QtWidgets.QGraphicsRectItem):
     def __init__(self,scene, x, y, rw, rh):
         super(ValueBox, self).__init__()
@@ -401,6 +400,7 @@ class ViewPort(QtWidgets.QGraphicsView):
         # init and paint component
         # left
         self.ic_1 = SwitchButton(self.scene, 180, 80,status_led_pos=SwitchButton.BOTTOM_POS,switch_name="IS8")
+        
         self.ic_2 = SwitchButton(self.scene, 60, 210,status_led_pos=SwitchButton.BOTTOM_POS,switch_name="IC1")
         #self.ic_2.setClickHandler(self.box_1_handler)
         self.ic_3 = SwitchButton(self.scene, 454, 255, status_led_pos=SwitchButton.LEFT_POS,switch_name="IS9")
@@ -435,8 +435,8 @@ class ViewPort(QtWidgets.QGraphicsView):
 
         #value boxes left 
         self.val_box_4 = ValueBox(self.scene, 60, 150, 70, 30)
-        self.val_box_5 = ValueBox(self.scene, 279, 254, 70, 30)
-        self.val_box_6 = ValueBox(self.scene, 279, 152, 70, 30)
+        self.val_box_5 = ValueBox(self.scene, 490, 350, 70, 30)
+        self.val_box_6 = ValueBox(self.scene, 490, 152, 70, 30)
 
         #value box lines
 
@@ -474,19 +474,19 @@ class ViewPort(QtWidgets.QGraphicsView):
         #self.mainBtn.move(2,610)
 
         self.setBtn = QtWidgets.QPushButton('Impostazioni', self)
-        self.setBtn.setStyleSheet("font: 28px;")
+        self.setBtn.setStyleSheet("font: 28px; width: 180px")
         self.setBtn.clicked.connect(self.navigateToSettings)
         self.setBtn.move(42,630)
 
         self.maintenanceBtn = QtWidgets.QPushButton('Misure', self)
         self.maintenanceBtn.setStyleSheet("font: 28px;")
         self.maintenanceBtn.clicked.connect(self.navigateToMaintenance)
-        self.maintenanceBtn.move(220,630)
+        self.maintenanceBtn.move(240,630)
 
         self.alarmBtn = QtWidgets.QPushButton('Allarmi', self)
         self.alarmBtn.setStyleSheet("font: 28px;")
         self.alarmBtn.clicked.connect(self.navigateToAlarm)
-        self.alarmBtn.move(324,630)
+        self.alarmBtn.move(344,630)
 
         self.dateLabel = ShowDate(self.scene) 
 
@@ -536,10 +536,14 @@ class ViewPort(QtWidgets.QGraphicsView):
         # print('------')
         # print(data['V1'])
         print(data)
-        self.val_box_4.setText(data['V1'])
-        self.val_box_1.setText(data['V2']) #verify
-        self.val_box_2.setText(data['V3'])
-        self.val_box_3.setText(data['V4'])
+        if ('V1' in data):
+            self.val_box_4.setText(data['V1'])
+        if ('V2' in data):
+            self.val_box_1.setText(data['V2']) #verify
+        if ('V3' in data):
+            self.val_box_2.setText(data['V3'])
+        if ('V3' in data):
+            self.val_box_3.setText(data['V4'])
         # self.val_box_3.setText(data['V2'] + ',' + data['I2'])
         
         # self.val_box_5.setText(data['V4'])
@@ -744,7 +748,7 @@ class BoardComm(QObject):
         super(BoardComm, self).__init__()
         self.com = QtSerialPort.QSerialPort(
             # '/dev/ttyS1'
-            '/dev/ttyS1'
+            '/dev/ttyS0'
         )
     
     def readData(self):
